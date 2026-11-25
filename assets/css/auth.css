@@ -1,0 +1,23 @@
+/* ==========================================================
+   Schermata di accesso
+   ========================================================== */
+html.is-locked .app { visibility: hidden; }
+.auth-gate {
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center; padding: 24px;
+  background: radial-gradient(1200px 600px at 50% -10%, rgba(23, 101, 232, 0.22), transparent 60%), var(--bg-app);
+}
+.auth-card {
+  width: min(400px, 100%);
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 32px 28px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+.auth-card__logo { width: 168px; height: auto; margin-bottom: 4px; }
+.auth-card__title { font-family: var(--font-display); font-size: var(--fs-2xl); line-height: 1.1; color: var(--text); }
+.auth-card__text { color: var(--text-2); font-size: var(--fs-md); line-height: 1.5; }
+.auth-card__error { color: var(--danger); font-size: var(--fs-sm); }
+.auth-card__btn { width: 100%; height: 44px; margin-top: 4px; }

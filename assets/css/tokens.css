@@ -1,0 +1,127 @@
+/* ==========================================================
+   ZEFIRO Studio Manager — Design tokens
+   Unica fonte di verità per colori, spaziature, tipografia.
+   ========================================================== */
+
+:root {
+  /* --- Palette di brand (obbligatoria) --- */
+  --zf-navy: #07152F;
+  --zf-blue: #1765E8;
+  --zf-sky: #39B8F4;
+  --zf-white: #FFFFFF;
+  --zf-muted: #A9BAD5;
+
+  /* --- Superfici derivate dal Navy --- */
+  --bg-app: #050F24;
+  --bg-sidebar: #06122A;
+  --bg-surface: #0A1C3B;
+  --bg-surface-2: #0D2247;
+  --bg-elevated: #10284F;
+  --bg-hover: rgba(169, 186, 213, 0.06);
+  --bg-active: rgba(23, 101, 232, 0.14);
+  --bg-input: #081833;
+
+  /* --- Bordi --- */
+  --border: rgba(169, 186, 213, 0.10);
+  --border-strong: rgba(169, 186, 213, 0.18);
+  --border-focus: var(--zf-sky);
+
+  /* --- Testo --- */
+  --text: var(--zf-white);
+  --text-2: var(--zf-muted);
+  --text-3: #7286A8;
+  --text-on-accent: var(--zf-white);
+
+  /* --- Accenti e stati --- */
+  --accent: var(--zf-blue);
+  --accent-hover: #2A74F0;
+  --accent-soft: rgba(23, 101, 232, 0.16);
+  --info: var(--zf-sky);
+  --info-soft: rgba(57, 184, 244, 0.14);
+  --success: #3CCB8E;
+  --success-soft: rgba(60, 203, 142, 0.14);
+  --warning: #F2B84B;
+  --warning-soft: rgba(242, 184, 75, 0.14);
+  --danger: #F06A6A;
+  --danger-soft: rgba(240, 106, 106, 0.14);
+
+  /* --- Tipografia --- */
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Inter Display", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --fs-xs: 0.75rem;   /* 12 */
+  --fs-sm: 0.8125rem; /* 13 */
+  --fs-md: 0.875rem;  /* 14 */
+  --fs-base: 0.9375rem; /* 15 */
+  --fs-lg: 1.0625rem; /* 17 */
+  --fs-xl: 1.375rem;  /* 22 */
+  --fs-2xl: 1.75rem;  /* 28 */
+  --fs-3xl: 2.25rem;  /* 36 */
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --lh-tight: 1.2;
+  --lh-normal: 1.5;
+
+  /* --- Spaziature (scala 4px) --- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* --- Raggi --- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+  --r-full: 999px;
+
+  /* --- Ombre (molto discrete) --- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --ring: 0 0 0 3px rgba(57, 184, 244, 0.28);
+
+  /* --- Layout --- */
+  --sidebar-w: 264px;
+  --sidebar-w-compact: 76px;
+  --topbar-h: 68px;
+  --content-max: 1360px;
+
+  /* --- Movimento --- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+
+  --z-sidebar: 40;
+  --z-overlay: 30;
+  --z-topbar: 20;
+  --z-modal: 100;
+  --z-toast: 110;
+}
+
+/* Preferenza utente: animazioni ridotte (impostazioni o sistema) */
+[data-motion="reduced"] {
+  --dur-1: 0ms;
+  --dur-2: 0ms;
+  --dur-3: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+  }
+}

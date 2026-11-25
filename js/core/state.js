@@ -55,7 +55,7 @@ export const appState = createStore({
   studio: { name: 'ZEFIRO Digital Studio', email: '', phone: '', website: '', vat: '', address: '' },
 
   /** Preferenze di interfaccia (localStorage) */
-  preferences: { sidebarCompact: false, reducedMotion: false },
+  preferences: { sidebarCompact: false, reducedMotion: false, showMotto: true },
 
   /** Modalità di navigazione calcolata dalla viewport: 'full' | 'rail' | 'drawer' */
   navMode: 'full',

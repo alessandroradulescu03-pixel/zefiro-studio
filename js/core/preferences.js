@@ -8,6 +8,7 @@ const KEY = 'zefiro.preferences.v1';
 export const DEFAULT_PREFERENCES = Object.freeze({
   sidebarCompact: false,
   reducedMotion: false,
+  showMotto: true,
 });
 
 export function loadPreferences() {

@@ -7,12 +7,13 @@ import { hrefFor } from '../config/modules.js';
 import { list, getOne, update, onDataChange } from '../core/api.js';
 import { CLIENT_STATUS, PROJECT_STATUS, REQUEST_STATUS, TASK_STATUS, labelOf } from '../config/crm.js';
 import {
-  editClient, editProject, editRequest, editTask, editReminder, toggleTask, toggleReminder, deleteRow,
+  editClient, editProject, editRequest, editTask, editReminder, editNote, toggleTask, toggleReminder, deleteRow,
 } from '../services/crm-service.js';
 import { emptyState } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
 import { icon } from '../components/icons.js';
 import { initials, formatRelative } from '../utils/format.js';
+import { noteCard, bindNoteActions } from './notes.js';
 import {
   badge, pageHead, button, toolbar, row, loadingList, errorBox, ilike, section, due, money,
 } from './crm-ui.js';
@@ -98,14 +99,15 @@ function mountDetail(container, id) {
 
   const load = async () => {
     try {
-      const [client, projects, requests, tasks, reminders] = await Promise.all([
+      const [client, projects, requests, tasks, reminders, notes] = await Promise.all([
         getOne('clients', id),
         list('projects', { client_id: `eq.${id}`, order: 'created_at.desc' }),
         list('requests', { client_id: `eq.${id}`, order: 'received_at.desc' }),
         list('tasks', { client_id: `eq.${id}`, order: 'due_date.asc.nullslast,created_at.asc' }).then(openFirst),
         list('reminders', { client_id: `eq.${id}`, done: 'eq.false', order: 'remind_at.asc' }),
+        list('notes', { client_id: `eq.${id}`, order: 'pinned.desc,updated_at.desc' }).catch(() => []),
       ]);
-      data = { client, projects, requests, tasks, reminders };
+      data = { client, projects, requests, tasks, reminders, notes };
       error = '';
     } catch (err) { error = err.message; }
     draw();
@@ -190,9 +192,15 @@ function mountDetail(container, id) {
                 title: r.title, aside: due(r.remind_at, { withTime: true }),
               }))}</ul>` : emptyState({ icon: 'bell', title: 'Nessun promemoria', compact: true }),
             })}
+            ${section({
+              title: 'Note', iconName: 'note', count: data.notes.length,
+              action: button('new-note', 'Aggiungi', { small: true }),
+              body: data.notes.length ? html`<div class="notes-stack">${data.notes.map((n) => noteCard(n, { showLinks: false }))}</div>`
+                : emptyState({ icon: 'note', title: 'Nessuna nota', compact: true }),
+            })}
             ${c.notes ? html`
               <section class="card crm-section">
-                <div class="card__head"><h3 class="card__title">${icon('note')}Note</h3></div>
+                <div class="card__head"><h3 class="card__title">${icon('info')}Informazioni</h3></div>
                 <div class="card__body"><p class="crm-notes">${c.notes}</p></div>
               </section>` : ''}
           </aside>
@@ -215,6 +223,8 @@ function mountDetail(container, id) {
     on(container, 'click', '[data-action="new-request"]', act(() => editRequest(null, { client_id: id }))),
     on(container, 'click', '[data-action="new-task"]', act(() => editTask(null, { client_id: id }))),
     on(container, 'click', '[data-action="new-reminder"]', act(() => editReminder(null, { client_id: id }))),
+    on(container, 'click', '[data-action="new-note"]', act(() => editNote(null, { client_id: id }))),
+    ...bindNoteActions(container, (nid) => find('notes', nid)),
     on(container, 'click', '[data-action="edit-task"]', act((_e, el) => editTask(find('tasks', el.dataset.id)))),
     on(container, 'click', '[data-action="toggle-task"]', act((_e, el) => toggleTask(find('tasks', el.dataset.id)))),
     on(container, 'click', '[data-action="edit-reminder"]', act((_e, el) => editReminder(find('reminders', el.dataset.id)))),

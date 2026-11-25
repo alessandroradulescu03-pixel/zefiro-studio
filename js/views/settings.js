@@ -434,6 +434,7 @@ function preferencesPanel({ preferences }) {
       <div class="card__body" style="padding-top:var(--sp-2)">
         ${row('sidebarCompact', 'Barra laterale compatta', 'Mostra solo le icone nella barra laterale su schermi desktop.')}
         ${row('reducedMotion', 'Riduci animazioni', 'Disattiva transizioni e microanimazioni dell\'interfaccia.')}
+        ${row('showMotto', 'Frase motivazionale', 'Mostra una frase motivazionale e il simbolo ZEFIRO in sottofondo nelle pagine.')}
       </div>
       <div class="card__foot">
         <button type="button" class="btn btn--ghost" data-action="reset-prefs">Ripristina predefinite</button>

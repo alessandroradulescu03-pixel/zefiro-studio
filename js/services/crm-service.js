@@ -220,6 +220,30 @@ export async function toggleReminder(rem) {
   return saved;
 }
 
+/* ---------------- Note ---------------- */
+
+export async function editNote(existing = null, defaults = {}) {
+  const [clients, projects] = await Promise.all([clientOptions(), projectOptions()]);
+  return saveDialog({
+    table: 'notes', entityType: 'note', titleNew: 'Nuova nota', titleEdit: 'Modifica nota',
+    fields: [
+      { name: 'title', label: 'Titolo', maxLength: 200, full: true, placeholder: 'Facoltativo' },
+      { name: 'body', label: 'Testo', type: 'textarea', maxLength: 20000, rows: 10, placeholder: 'Scrivi qui…' },
+      { name: 'client_id', label: 'Cliente', type: 'select', options: clients, nullable: true },
+      { name: 'project_id', label: 'Progetto', type: 'select', options: projects, nullable: true },
+      { name: 'pinned', label: 'In evidenza', type: 'checkbox', checkLabel: '📌 Tienila in evidenza (sempre in cima)', full: true },
+    ],
+    existing, defaults,
+    labelOf: (n) => n.title || n.body.slice(0, 40) || 'Nota',
+    fix: (v) => {
+      if (!v.title.trim() && !v.body.trim()) throw new Error('Scrivi almeno un titolo o un testo.');
+      return v;
+    },
+  });
+}
+
+export const toggleNotePin = (note) => update('notes', note.id, { pinned: !note.pinned });
+
 /* ---------------- Eliminazione ---------------- */
 
 const DELETE_TEXT = {
@@ -228,8 +252,9 @@ const DELETE_TEXT = {
   projects: (n) => [`Eliminare il progetto "${n}"?`, 'Verranno eliminate anche le sue cose da fare e i suoi promemoria. L\'operazione non si può annullare.'],
   tasks: (n) => [`Eliminare "${n}" dalle cose da fare?`, 'L\'operazione non si può annullare.'],
   reminders: (n) => [`Eliminare il promemoria "${n}"?`, 'L\'operazione non si può annullare.'],
+  notes: (n) => [`Eliminare la nota "${n}"?`, 'L\'operazione non si può annullare.'],
 };
-const ENTITY = { clients: 'client', requests: 'request', projects: 'project', tasks: 'task', reminders: 'reminder' };
+const ENTITY = { clients: 'client', requests: 'request', projects: 'project', tasks: 'task', reminders: 'reminder', notes: 'note' };
 
 /** Chiede conferma ed elimina. Restituisce true se eliminato. */
 export async function deleteRow(table, row, name) {

@@ -18,6 +18,7 @@ import { mountSidebar, DESKTOP_QUERY } from './components/sidebar.js';
 import { mountTopbar } from './components/topbar.js';
 import { toast } from './components/toast.js';
 import { requireLogin } from './core/auth.js';
+import { mountMotto } from './components/motto.js';
 
 const MOBILE_QUERY = '(max-width: 760px)';
 
@@ -103,6 +104,7 @@ async function boot() {
 
   mountSidebar(els.sidebar);
   mountTopbar(els.topbar);
+  mountMotto();
 
   try {
     await openDatabase();

@@ -89,9 +89,8 @@ export const MODULES = [
     label: 'Note',
     section: 'management',
     icon: 'note',
-    status: 'planned',
-    description: 'Appunti interni dello studio, liberi o collegati a clienti e progetti.',
-    features: ['Note libere', 'Collegamento a clienti e progetti', 'Ricerca'],
+    status: 'ready',
+    load: () => import('../views/notes.js'),
   },
   {
     id: 'reminders',
@@ -118,9 +117,8 @@ export const MODULES = [
     label: 'Archivio',
     section: 'management',
     icon: 'archive',
-    status: 'planned',
-    description: 'Clienti, progetti e preventivi conclusi, consultabili senza appesantire le liste operative.',
-    features: ['Elementi archiviati', 'Ripristino', 'Ricerca'],
+    status: 'ready',
+    load: () => import('../views/archive.js'),
   },
   {
     id: 'settings',

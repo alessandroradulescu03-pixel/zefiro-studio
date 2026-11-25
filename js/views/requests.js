@@ -133,6 +133,7 @@ function mountDetail(container, id) {
           </div>
           <div class="page-head__actions">
             ${button('edit', 'Modifica', { iconName: 'settings' })}
+            ${r.status === 'archiviata' ? '' : button('set-status', 'Archivia', { iconName: 'archive', data: { status: 'archiviata' } })}
             ${button('delete', 'Elimina', { iconName: 'trash', danger: true })}
           </div>
         </header>

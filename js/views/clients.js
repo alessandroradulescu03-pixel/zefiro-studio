@@ -49,7 +49,7 @@ function mountList(container) {
     if (!state.rows.length) {
       return render(slot, emptyState(state.q || state.status !== 'operativi'
         ? { icon: 'search', title: 'Nessun cliente trovato', text: 'Prova a cambiare la ricerca o il filtro.', compact: true }
-        : { icon: 'users', title: 'Ancora nessun cliente', text: 'Aggiungi il primo cliente per iniziare a gestire richieste e progetti.', actions: [{ label: 'Nuovo cliente', action: 'new', primary: true, icon: 'plus' }] }));
+        : { icon: 'users', title: 'Ancora nessun cliente', text: 'Aggiungi il primo cliente per iniziare a gestire contatti e progetti.', actions: [{ label: 'Nuovo cliente', action: 'new', primary: true, icon: 'plus' }] }));
     }
     render(slot, html`<ul class="crm-list">${state.rows.map((c) => row({
       href: hrefFor('clients', c.id),
@@ -149,21 +149,21 @@ function mountDetail(container, id) {
               }))}</ul>` : emptyState({ icon: 'folder', title: 'Nessun progetto', compact: true }),
             })}
             ${section({
-              title: 'Richieste', iconName: 'inbox', count: data.requests.length,
-              action: button('new-request', 'Nuova', { small: true }),
+              title: 'Contatti in arrivo', iconName: 'inbox', count: data.requests.length,
+              action: button('new-request', 'Nuovo', { small: true }),
               body: data.requests.length ? html`<ul class="crm-list">${data.requests.map((r) => row({
                 href: hrefFor('requests', r.id), iconName: 'inbox', title: r.title,
                 meta: formatRelative(r.received_at), aside: badge(REQUEST_STATUS, r.status),
-              }))}</ul>` : emptyState({ icon: 'inbox', title: 'Nessuna richiesta', compact: true }),
+              }))}</ul>` : emptyState({ icon: 'inbox', title: 'Nessun contatto', compact: true }),
             })}
             ${section({
-              title: 'Attività', iconName: 'check-square', count: data.tasks.filter((t) => t.status !== 'fatto').length,
-              action: button('new-task', 'Nuova', { small: true }),
+              title: 'Da fare', iconName: 'check-square', count: data.tasks.filter((t) => t.status !== 'fatto').length,
+              action: button('new-task', 'Aggiungi', { small: true }),
               body: data.tasks.length ? html`<ul class="crm-list">${data.tasks.map((t) => row({
                 id: t.id, action: 'edit-task', check: { action: 'toggle-task', done: t.status === 'fatto' },
                 title: t.title, meta: labelOf(TASK_STATUS, t.status).label,
                 aside: t.status !== 'fatto' ? due(t.due_date) : '', muted: t.status === 'fatto',
-              }))}</ul>` : emptyState({ icon: 'check-square', title: 'Nessuna attività', compact: true }),
+              }))}</ul>` : emptyState({ icon: 'check-square', title: 'Niente da fare', compact: true }),
             })}
           </div>
 

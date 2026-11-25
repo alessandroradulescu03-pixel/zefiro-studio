@@ -20,8 +20,8 @@ import {
 const STATS = [
   { key: 'clients', label: 'Clienti', icon: 'users', module: 'clients' },
   { key: 'activeProjects', label: 'Progetti attivi', icon: 'folder', module: 'projects' },
-  { key: 'openRequests', label: 'Richieste aperte', icon: 'inbox', module: 'requests' },
-  { key: 'openTasks', label: 'Attività da completare', icon: 'check-square', module: 'tasks' },
+  { key: 'openRequests', label: 'Contatti da gestire', icon: 'inbox', module: 'requests' },
+  { key: 'openTasks', label: 'Cose da fare', icon: 'check-square', module: 'tasks' },
 ];
 
 export default {
@@ -111,7 +111,7 @@ function summary(state, data) {
   if (nothing) return `Benvenuto in Studio Manager. Qui troverai il riepilogo del lavoro di ${studio} non appena inizierai a inserire clienti e progetti.`;
 
   const parts = [];
-  parts.push(`Hai ${plural(counts.activeProjects, 'progetto attivo', 'progetti attivi')} e ${plural(counts.openTasks, 'attività da completare', 'attività da completare')}`);
+  parts.push(`Hai ${plural(counts.activeProjects, 'progetto attivo', 'progetti attivi')} e ${plural(counts.openTasks, 'cosa da fare', 'cose da fare')}`);
   if (overdue) parts.push(`${plural(overdue, 'scadenza è già passata', 'scadenze sono già passate')}`);
   else if (deadlines.length) parts.push(`la prossima scadenza è ${dueLabel(deadlines[0].days).toLowerCase()}`);
   return `${parts.join('; ')}.`;
@@ -183,7 +183,7 @@ function deadlinesCard(data) {
       <div class="card__head">
         <div>
           <h3 class="card__title" id="deadlines-title">${icon('clock')}Prossime scadenze</h3>
-          <p class="card__subtitle">Progetti, attività, preventivi e promemoria nei prossimi 30 giorni</p>
+          <p class="card__subtitle">Progetti, cose da fare, preventivi e promemoria nei prossimi 30 giorni</p>
         </div>
       </div>
       <div class="card__body">
@@ -208,7 +208,7 @@ function deadlinesCard(data) {
           </ul>` : emptyState({
             icon: 'calendar',
             title: 'Nessuna scadenza in programma',
-            text: 'Le scadenze di progetti, attività, preventivi e promemoria compariranno qui automaticamente.',
+            text: 'Le scadenze di progetti, cose da fare, preventivi e promemoria compariranno qui automaticamente.',
             compact: true,
             actions: [{ label: 'Apri il calendario', href: hrefFor('calendar'), icon: 'calendar' }],
           })}
@@ -222,7 +222,7 @@ function activityCard(data) {
     <section class="card" aria-labelledby="activity-title">
       <div class="card__head">
         <div>
-          <h3 class="card__title" id="activity-title">${icon('activity')}Attività recenti</h3>
+          <h3 class="card__title" id="activity-title">${icon('activity')}Ultime operazioni</h3>
           <p class="card__subtitle">Le ultime operazioni registrate nel gestionale</p>
         </div>
       </div>
@@ -243,7 +243,7 @@ function activityCard(data) {
             })}
           </ul>` : emptyState({
             icon: 'activity',
-            title: 'Ancora nessuna attività',
+            title: 'Ancora nessuna operazione',
             text: 'Ogni operazione su clienti, progetti e preventivi verrà registrata qui, così avrai sempre sotto controllo cosa è cambiato.',
             compact: true,
             actions: [{ label: 'Vai alla timeline', href: hrefFor('timeline'), icon: 'arrow-right' }],

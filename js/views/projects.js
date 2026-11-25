@@ -51,7 +51,7 @@ function mountList(container) {
     if (!state.rows.length) {
       return render(slot, emptyState(state.q || state.status !== 'attivi'
         ? { icon: 'search', title: 'Nessun progetto trovato', text: 'Prova a cambiare la ricerca o il filtro.', compact: true }
-        : { icon: 'folder', title: 'Nessun progetto in lavorazione', text: 'Crea un progetto, oppure trasforma una richiesta accettata in progetto.', actions: [{ label: 'Nuovo progetto', action: 'new', primary: true, icon: 'plus' }] }));
+        : { icon: 'folder', title: 'Nessun progetto in lavorazione', text: 'Crea un progetto, oppure trasforma in progetto un contatto in arrivo.', actions: [{ label: 'Nuovo progetto', action: 'new', primary: true, icon: 'plus' }] }));
     }
     render(slot, html`<ul class="crm-list">${state.rows.map((p) => row({
       href: hrefFor('projects', p.id), iconName: 'folder', title: p.name,
@@ -143,16 +143,16 @@ function mountDetail(container, id) {
         <div class="crm-detail">
           <div class="crm-detail__main">
             ${section({
-              title: 'Attività', iconName: 'check-square', count: `${total - open}/${total}`,
-              action: button('new-task', 'Nuova', { small: true }),
+              title: 'Da fare', iconName: 'check-square', count: `${total - open}/${total}`,
+              action: button('new-task', 'Aggiungi', { small: true }),
               body: html`
-                ${total ? html`<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Attività completate">
+                ${total ? html`<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Cose fatte">
                   <div class="progress__bar" style="width:${pct}%"></div></div>` : ''}
                 ${total ? html`<ul class="crm-list" style="margin-top:var(--sp-3)">${data.tasks.map((t) => row({
                   id: t.id, action: 'edit-task', check: { action: 'toggle-task', done: t.status === 'fatto' },
                   title: t.title, meta: labelOf(TASK_STATUS, t.status).label,
                   aside: t.status !== 'fatto' ? due(t.due_date) : '', muted: t.status === 'fatto',
-                }))}</ul>` : emptyState({ icon: 'check-square', title: 'Nessuna attività', text: 'Spezza il progetto in attività da spuntare.', compact: true })}`,
+                }))}</ul>` : emptyState({ icon: 'check-square', title: 'Niente da fare', text: 'Aggiungi qui le cose da fare e le modifiche chieste dal cliente, e spuntale man mano.', compact: true })}`,
             })}
             ${p.description ? html`
               <section class="card crm-section">
@@ -183,7 +183,7 @@ function mountDetail(container, id) {
               }))}</ul>` : emptyState({ icon: 'bell', title: 'Nessun promemoria', compact: true }),
             })}
             ${data.requests.length ? section({
-              title: 'Richiesta di origine', iconName: 'inbox',
+              title: 'Contatto di origine', iconName: 'inbox',
               body: html`<ul class="crm-list">${data.requests.map((r) => row({
                 href: hrefFor('requests', r.id), title: r.title, meta: formatRelative(r.received_at), aside: badge(REQUEST_STATUS, r.status),
               }))}</ul>`,

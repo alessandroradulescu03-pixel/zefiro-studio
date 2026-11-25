@@ -40,7 +40,7 @@ export const MODULES = [
   {
     id: 'requests',
     path: 'richieste',
-    label: 'Richieste',
+    label: 'Contatti in arrivo',
     section: 'workspace',
     icon: 'inbox',
     status: 'ready',
@@ -58,7 +58,7 @@ export const MODULES = [
   {
     id: 'tasks',
     path: 'attivita',
-    label: 'Attività',
+    label: 'Da fare',
     section: 'workspace',
     icon: 'check-square',
     status: 'ready',
@@ -70,9 +70,8 @@ export const MODULES = [
     label: 'Calendario',
     section: 'workspace',
     icon: 'calendar',
-    status: 'planned',
-    description: 'Vista calendario di scadenze, consegne e promemoria.',
-    features: ['Vista mensile e settimanale', 'Scadenze di progetti e attività', 'Promemoria'],
+    status: 'ready',
+    load: () => import('../views/calendar.js'),
   },
   {
     id: 'quotes',

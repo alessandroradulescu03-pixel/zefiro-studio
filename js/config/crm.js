@@ -15,12 +15,12 @@ export const CLIENT_STATUS = opts([
 ]);
 
 export const REQUEST_STATUS = opts([
-  ['nuova', 'Nuova', 'info'],
+  ['nuova', 'Nuovo', 'info'],
   ['in_valutazione', 'In valutazione', 'warning'],
   ['preventivo_inviato', 'Preventivo inviato', 'warning'],
-  ['accettata', 'Accettata', 'success'],
-  ['rifiutata', 'Rifiutata', 'danger'],
-  ['archiviata', 'Archiviata', ''],
+  ['accettata', 'Accettato', 'success'],
+  ['rifiutata', 'Non interessato', 'danger'],
+  ['archiviata', 'Archiviato', ''],
 ]);
 export const OPEN_REQUESTS = ['nuova', 'in_valutazione', 'preventivo_inviato'];
 

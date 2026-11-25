@@ -49,7 +49,7 @@ const clientFields = () => [
 ];
 
 const requestFields = (clients, projects) => [
-  { name: 'title', label: 'Oggetto', required: true, maxLength: 200, full: true, placeholder: 'Es. Nuovo sito vetrina' },
+  { name: 'title', label: 'Cosa chiede', required: true, maxLength: 200, full: true, placeholder: 'Es. Nuovo sito vetrina' },
   { name: 'client_id', label: 'Cliente', type: 'select', options: clients, nullable: true, emptyLabel: '— Non ancora cliente —' },
   { name: 'source', label: 'Provenienza', type: 'select', options: REQUEST_SOURCE, default: 'altro' },
   { name: 'contact_name', label: 'Nome contatto', maxLength: 160, hint: 'Se chi scrive non è ancora un cliente' },
@@ -74,7 +74,7 @@ const projectFields = (clients) => [
 ];
 
 const taskFields = (projects, clients) => [
-  { name: 'title', label: 'Attività', required: true, maxLength: 200, full: true, placeholder: 'Es. Inviare bozza home page' },
+  { name: 'title', label: 'Cosa devi fare', required: true, maxLength: 200, full: true, placeholder: 'Es. Inviare bozza home page' },
   { name: 'project_id', label: 'Progetto', type: 'select', options: projects, nullable: true },
   { name: 'client_id', label: 'Cliente', type: 'select', options: clients, nullable: true },
   { name: 'status', label: 'Stato', type: 'select', options: TASK_STATUS, default: 'da_fare' },
@@ -129,7 +129,7 @@ export function editClient(existing = null, defaults = {}) {
 export async function editRequest(existing = null, defaults = {}) {
   const [clients, projects] = await Promise.all([clientOptions(), projectOptions()]);
   return saveDialog({
-    table: 'requests', entityType: 'request', titleNew: 'Nuova richiesta', titleEdit: 'Modifica richiesta',
+    table: 'requests', entityType: 'request', titleNew: 'Nuovo contatto in arrivo', titleEdit: 'Modifica contatto',
     fields: requestFields(clients, projects), existing,
     defaults: { received_at: new Date().toISOString(), ...defaults },
     labelOf: (r) => r.title,
@@ -185,7 +185,7 @@ export async function editProject(existing = null, defaults = {}) {
 export async function editTask(existing = null, defaults = {}) {
   const [projects, clients] = await Promise.all([projectOptions(), clientOptions()]);
   return saveDialog({
-    table: 'tasks', entityType: 'task', titleNew: 'Nuova attività', titleEdit: 'Modifica attività',
+    table: 'tasks', entityType: 'task', titleNew: 'Nuova cosa da fare', titleEdit: 'Modifica cosa da fare',
     fields: taskFields(projects, clients), existing, defaults, labelOf: (t) => t.title,
     fix: (v, ex) => ({ ...v, completed_at: stamp(v.status === 'fatto', ex?.completed_at) }),
   });
@@ -223,10 +223,10 @@ export async function toggleReminder(rem) {
 /* ---------------- Eliminazione ---------------- */
 
 const DELETE_TEXT = {
-  clients: (n) => [`Eliminare il cliente "${n}"?`, 'Verranno eliminate anche le sue attività e i suoi promemoria. Le richieste restano, senza cliente collegato. Se ha progetti non si può eliminare: archivialo.'],
-  requests: (n) => [`Eliminare la richiesta "${n}"?`, 'L\'operazione non si può annullare.'],
-  projects: (n) => [`Eliminare il progetto "${n}"?`, 'Verranno eliminate anche le sue attività e i suoi promemoria. L\'operazione non si può annullare.'],
-  tasks: (n) => [`Eliminare l'attività "${n}"?`, 'L\'operazione non si può annullare.'],
+  clients: (n) => [`Eliminare il cliente "${n}"?`, 'Verranno eliminate anche le sue cose da fare e i suoi promemoria. I contatti in arrivo restano, senza cliente collegato. Se ha progetti non si può eliminare: archivialo.'],
+  requests: (n) => [`Eliminare il contatto "${n}"?`, 'L\'operazione non si può annullare.'],
+  projects: (n) => [`Eliminare il progetto "${n}"?`, 'Verranno eliminate anche le sue cose da fare e i suoi promemoria. L\'operazione non si può annullare.'],
+  tasks: (n) => [`Eliminare "${n}" dalle cose da fare?`, 'L\'operazione non si può annullare.'],
   reminders: (n) => [`Eliminare il promemoria "${n}"?`, 'L\'operazione non si può annullare.'],
 };
 const ENTITY = { clients: 'client', requests: 'request', projects: 'project', tasks: 'task', reminders: 'reminder' };

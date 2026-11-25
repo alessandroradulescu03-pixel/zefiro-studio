@@ -37,8 +37,8 @@ export default {
 
     render(container, html`
       <div class="view-enter">
-        ${pageHead({ title: 'Attività', text: 'Le cose da fare, ordinate per scadenza. Spunta il cerchio per completarle.', actions: button('new', 'Nuova attività', { primary: true }) })}
-        ${toolbar({ placeholder: 'Cerca un\'attività…', filters: [{ name: 'status', label: 'Stato', options: STATUS_FILTER, value: state.status }] })}
+        ${pageHead({ title: 'Da fare', text: 'Le cose che devi fare tu (anche le modifiche chieste dai clienti), ordinate per scadenza. Spunta il cerchio quando le hai fatte.', actions: button('new', 'Nuova cosa da fare', { primary: true }) })}
+        ${toolbar({ placeholder: 'Cerca…', filters: [{ name: 'status', label: 'Stato', options: STATUS_FILTER, value: state.status }] })}
         <div data-slot="list"></div>
       </div>`);
     const slot = container.querySelector('[data-slot="list"]');
@@ -48,8 +48,8 @@ export default {
       if (!state.rows) return render(slot, html`<div class="card"><div class="card__body">${loadingList()}</div></div>`);
       if (!state.rows.length) {
         return render(slot, html`<div class="card">${emptyState(state.q || state.status !== 'aperte'
-          ? { icon: 'search', title: 'Nessuna attività trovata', text: 'Prova a cambiare la ricerca o il filtro.', compact: true }
-          : { icon: 'check-square', title: 'Tutto fatto!', text: 'Non hai attività da completare.', actions: [{ label: 'Nuova attività', action: 'new', primary: true, icon: 'plus' }] })}</div>`);
+          ? { icon: 'search', title: 'Niente trovato', text: 'Prova a cambiare la ricerca o il filtro.', compact: true }
+          : { icon: 'check-square', title: 'Tutto fatto!', text: 'Non hai niente in sospeso.', actions: [{ label: 'Nuova cosa da fare', action: 'new', primary: true, icon: 'plus' }] })}</div>`);
       }
       const groups = new Map(GROUP_ORDER.map((g) => [g, []]));
       state.rows.forEach((t) => groups.get(groupOf(t)).push(t));
@@ -62,7 +62,7 @@ export default {
               title: t.title,
               meta: [t.project?.name, t.client?.name].filter(Boolean).join(' · ') || 'Generale',
               aside: html`${t.priority === 'alta' ? badge(PRIORITY, 'alta') : ''} ${t.status === 'in_corso' ? badge(TASK_STATUS, 'in_corso') : ''} ${t.status !== 'fatto' ? due(t.due_date) : ''}
-                <button type="button" class="icon-btn" data-action="delete" data-id="${t.id}" aria-label="Elimina attività">${icon('trash', 'icon--sm')}</button>`,
+                <button type="button" class="icon-btn" data-action="delete" data-id="${t.id}" aria-label="Elimina">${icon('trash', 'icon--sm')}</button>`,
               muted: t.status === 'fatto',
             }))}</ul>
           </div>

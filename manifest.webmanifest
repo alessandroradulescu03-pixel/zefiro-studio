@@ -1,0 +1,16 @@
+{
+  "name": "ZEFIRO Studio Manager",
+  "short_name": "Zefiro Studio",
+  "description": "Gestionale interno di ZEFIRO Digital Studio",
+  "lang": "it",
+  "start_url": "./#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050F24",
+  "theme_color": "#07152F",
+  "icons": [
+    { "src": "assets/img/app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/app/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

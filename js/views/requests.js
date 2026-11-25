@@ -41,9 +41,9 @@ function mountList(container) {
 
   render(container, html`
     <div class="view-enter">
-      ${pageHead({ title: 'Richieste', text: 'Contatti e richieste in arrivo, da valutare e trasformare in clienti e progetti.', actions: button('new', 'Nuova richiesta', { primary: true }) })}
+      ${pageHead({ title: 'Contatti in arrivo', text: 'Chi ti scrive per un lavoro (Instagram, WhatsApp, email, sito…). Valutalo e trasformalo in cliente e progetto con un clic.', actions: button('new', 'Nuovo contatto', { primary: true }) })}
       ${toolbar({
-        placeholder: 'Cerca per oggetto, nome o email…',
+        placeholder: 'Cerca per nome, email o cosa chiede…',
         filters: [
           { name: 'status', label: 'Stato', options: STATUS_FILTER, value: state.status },
           { name: 'source', label: 'Provenienza', options: SOURCE_FILTER, value: state.source },
@@ -58,8 +58,8 @@ function mountList(container) {
     if (!state.rows) return render(slot, loadingList());
     if (!state.rows.length) {
       return render(slot, emptyState(state.q || state.status !== 'aperte' || state.source
-        ? { icon: 'search', title: 'Nessuna richiesta trovata', text: 'Prova a cambiare la ricerca o i filtri.', compact: true }
-        : { icon: 'inbox', title: 'Nessuna richiesta da gestire', text: 'Registra qui le richieste che ricevi via email, telefono, WhatsApp o dal sito.', actions: [{ label: 'Nuova richiesta', action: 'new', primary: true, icon: 'plus' }] }));
+        ? { icon: 'search', title: 'Nessun contatto trovato', text: 'Prova a cambiare la ricerca o i filtri.', compact: true }
+        : { icon: 'inbox', title: 'Nessun contatto da gestire', text: 'Quando qualcuno ti scrive per un lavoro, registralo qui.', actions: [{ label: 'Nuovo contatto', action: 'new', primary: true, icon: 'plus' }] }));
     }
     render(slot, html`<ul class="crm-list">${state.rows.map((r) => row({
       href: hrefFor('requests', r.id), iconName: 'inbox', title: r.title,
@@ -116,7 +116,7 @@ function mountDetail(container, id) {
     if (!loaded) return render(container, html`<div class="view-enter">${backLink()}<div class="card"><div class="card__body">${loadingList()}</div></div></div>`);
     if (!req) {
       return render(container, html`<div class="view-enter">${backLink()}<div class="card">${emptyState({
-        icon: 'inbox', title: 'Richiesta non trovata', text: 'Potrebbe essere stata eliminata.', actions: [{ label: 'Torna alle richieste', href: hrefFor('requests'), primary: true }],
+        icon: 'inbox', title: 'Contatto non trovato', text: 'Potrebbe essere stato eliminato.', actions: [{ label: 'Torna ai contatti', href: hrefFor('requests'), primary: true }],
       })}</div></div>`);
     }
     const r = req;
@@ -140,7 +140,7 @@ function mountDetail(container, id) {
         <div class="crm-detail">
           <div class="crm-detail__main">
             <section class="card crm-section">
-              <div class="card__head"><h3 class="card__title">${icon('note')}Richiesta</h3></div>
+              <div class="card__head"><h3 class="card__title">${icon('note')}Cosa chiede</h3></div>
               <div class="card__body">${r.description ? html`<p class="crm-notes">${r.description}</p>` : html`<p class="crm-empty">Nessuna descrizione.</p>`}</div>
             </section>
 
@@ -150,7 +150,7 @@ function mountDetail(container, id) {
                 <div class="crm-steps">
                   ${r.client
                     ? html`<a class="crm-step is-done" href="${hrefFor('clients', r.client.id)}">${icon('check', 'icon--sm')}<span>Cliente: <strong>${r.client.name}</strong></span></a>`
-                    : html`<button type="button" class="crm-step" data-action="to-client">${icon('users', 'icon--sm')}<span>Crea il cliente da questa richiesta</span></button>`}
+                    : html`<button type="button" class="crm-step" data-action="to-client">${icon('users', 'icon--sm')}<span>Crea il cliente da questo contatto</span></button>`}
                   ${r.project
                     ? html`<a class="crm-step is-done" href="${hrefFor('projects', r.project.id)}">${icon('check', 'icon--sm')}<span>Progetto: <strong>${r.project.name}</strong></span></a>`
                     : html`<button type="button" class="crm-step" data-action="to-project">${icon('folder', 'icon--sm')}<span>Trasforma in progetto${r.client ? '' : ' (anche senza cliente)'}</span></button>`}
@@ -158,7 +158,7 @@ function mountDetail(container, id) {
                     <div class="crm-step-row">
                       ${r.status === 'nuova' ? button('set-status', 'In valutazione', { small: true, iconName: 'clock', data: { status: 'in_valutazione' } }) : ''}
                       ${r.status !== 'preventivo_inviato' ? button('set-status', 'Preventivo inviato', { small: true, iconName: 'file-text', data: { status: 'preventivo_inviato' } }) : ''}
-                      ${button('set-status', 'Rifiutata', { small: true, iconName: 'x', data: { status: 'rifiutata' } })}
+                      ${button('set-status', 'Non interessato', { small: true, iconName: 'x', data: { status: 'rifiutata' } })}
                     </div>` : html`<div class="crm-step-row">${button('set-status', 'Riapri', { small: true, iconName: 'arrow-up-right', data: { status: 'in_valutazione' } })}</div>`}
                 </div>`,
             })}
@@ -203,7 +203,7 @@ function mountDetail(container, id) {
   return () => offs.forEach((off) => off());
 }
 
-const backLink = () => html`<a class="crm-back" href="${hrefFor('requests')}">${icon('chevrons-left', 'icon--sm')}<span>Tutte le richieste</span></a>`;
+const backLink = () => html`<a class="crm-back" href="${hrefFor('requests')}">${icon('chevrons-left', 'icon--sm')}<span>Tutti i contatti in arrivo</span></a>`;
 
 function kv(label, value, href = '') {
   return html`<div class="crm-kv__row"><dt>${label}</dt><dd>${value ? (href ? html`<a class="link" href="${href}">${value}</a>` : value) : html`<span class="crm-empty">—</span>`}</dd></div>`;

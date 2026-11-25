@@ -38,9 +38,9 @@ export const QUOTE_STATUS = Object.freeze({
 /** Tipi di entità usati nella timeline. */
 export const ENTITY_TYPES = Object.freeze({
   client: { label: 'Cliente', icon: 'users', module: 'clients' },
-  request: { label: 'Richiesta', icon: 'inbox', module: 'requests' },
+  request: { label: 'Contatto', icon: 'inbox', module: 'requests' },
   project: { label: 'Progetto', icon: 'folder', module: 'projects' },
-  task: { label: 'Attività', icon: 'check-square', module: 'tasks' },
+  task: { label: 'Da fare', icon: 'check-square', module: 'tasks' },
   quote: { label: 'Preventivo', icon: 'file-text', module: 'quotes' },
   note: { label: 'Nota', icon: 'note', module: 'notes' },
   reminder: { label: 'Promemoria', icon: 'bell', module: 'reminders' },

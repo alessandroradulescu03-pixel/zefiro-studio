@@ -26,9 +26,9 @@ const TABS = [
 
 const STORE_LABELS = {
   [STORES.CLIENTS]: 'Clienti',
-  [STORES.REQUESTS]: 'Richieste',
+  [STORES.REQUESTS]: 'Contatti in arrivo',
   [STORES.PROJECTS]: 'Progetti',
-  [STORES.TASKS]: 'Attività',
+  [STORES.TASKS]: 'Da fare',
   [STORES.QUOTES]: 'Preventivi',
   [STORES.NOTES]: 'Note',
   [STORES.REMINDERS]: 'Promemoria',

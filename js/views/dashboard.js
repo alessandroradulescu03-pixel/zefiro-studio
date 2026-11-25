@@ -5,6 +5,7 @@
 
 import { html, render } from '../utils/dom.js';
 import { onChange } from '../core/database.js';
+import { onDataChange } from '../core/api.js';
 import { appState } from '../core/state.js';
 import { hrefFor } from '../config/modules.js';
 import { ENTITY_TYPES, ACTIVITY_ACTIONS } from '../config/domain.js';
@@ -39,7 +40,7 @@ export default {
         draw();
       } catch (err) {
         console.error('[dashboard]', err);
-        toast.error('Impossibile caricare i dati della dashboard.');
+        toast.error(err?.message || 'Impossibile caricare i dati della dashboard.');
       }
     };
 
@@ -48,10 +49,12 @@ export default {
 
     // Debounce leggero per scritture ravvicinate
     let pending;
-    const offDb = onChange(() => {
+    const reload = () => {
       clearTimeout(pending);
       pending = setTimeout(load, 120);
-    });
+    };
+    const offDb = onChange(reload);
+    const offApi = onDataChange(reload);
     const offState = appState.subscribe((s, prev) => {
       if (s.profile !== prev.profile || s.studio !== prev.studio) draw();
     });
@@ -60,6 +63,7 @@ export default {
       disposed = true;
       clearTimeout(pending);
       offDb();
+      offApi();
       offState();
     };
   },
@@ -136,8 +140,8 @@ function onboarding(state, data) {
   const steps = [
     { done: Boolean(state.profile.name), title: 'Configura il tuo profilo', desc: 'Nome e ruolo per personalizzare il gestionale', href: hrefFor('settings', 'profilo') },
     { done: Boolean(state.studio.email || state.studio.vat || state.studio.phone), title: 'Completa i dati dello studio', desc: 'Contatti e dati fiscali di ZEFIRO Digital Studio', href: hrefFor('settings', 'studio') },
-    { done: data.counts.clients > 0, title: 'Aggiungi il primo cliente', desc: 'Disponibile con il modulo Clienti', href: hrefFor('clients') },
-    { done: data.counts.totalProjects > 0, title: 'Crea il primo progetto', desc: 'Disponibile con il modulo Progetti', href: hrefFor('projects') },
+    { done: data.counts.clients > 0, title: 'Aggiungi il primo cliente', desc: 'Dal modulo Clienti', href: hrefFor('clients') },
+    { done: data.counts.totalProjects > 0, title: 'Crea il primo progetto', desc: 'Dal modulo Progetti', href: hrefFor('projects') },
   ];
   const completed = steps.filter((s) => s.done).length;
   if (completed === steps.length) return '';
@@ -195,7 +199,7 @@ function deadlinesCard(data) {
                     <span class="deadline__month">${formatMonthShort(date)}</span>
                   </span>
                   <div class="list-row__main">
-                    <p class="list-row__title">${d.title}</p>
+                    <p class="list-row__title"><a class="dash-link" href="${d.type === 'project' ? hrefFor('projects', d.id) : hrefFor(type.module)}">${d.title}</a></p>
                     <p class="list-row__meta">${type.label}</p>
                   </div>
                   <span class="badge ${badgeFor(d.days)}">${dueLabel(d.days)}</span>

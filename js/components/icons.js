@@ -39,6 +39,7 @@ const PATHS = {
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   shield: '<path d="M12 3.5 5 6v5.5c0 4.4 3 7.9 7 9 4-1.1 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
   flag: '<path d="M5 21V4.5M5 4.5h11l-2 4 2 4H5"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',
   rocket: '<path d="M14.5 4.5c3-1 5-1 5-1s0 2-1 5l-6.5 6.5-4-4z"/><path d="M8 10.5 5 10l-2 2 4 1M13.5 16l.5 3-2 2-1-4M15.5 8.5h.01"/>',
 };
 

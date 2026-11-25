@@ -1,0 +1,19 @@
+# Intestazioni di sicurezza per Cloudflare Pages (il file non viene pubblicato,
+# Cloudflare lo legge e applica le regole a tutte le pagine).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://lguktbqwsplabptuvmgu.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Robots-Tag: noindex, nofollow
+
+/index.html
+  Cache-Control: no-cache
+
+/js/*
+  Cache-Control: no-cache
+
+/assets/css/*
+  Cache-Control: no-cache

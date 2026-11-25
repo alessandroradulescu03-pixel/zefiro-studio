@@ -1,6 +1,8 @@
 /**
  * Accesso con Supabase Auth, senza librerie: poche chiamate fetch.
  * La sessione resta nel browser (localStorage) e si rinnova da sola.
+ * All'avvio il token viene verificato con Supabase (non basta la copia locale),
+ * e i dati del CRM sono comunque protetti lato server dalla Row Level Security.
  */
 import { AUTH } from '../config/auth.js';
 
@@ -23,6 +25,8 @@ function toSession(data) {
   return { access: data.access_token, refresh: data.refresh_token, expiresAt, email: data.user?.email || '' };
 }
 
+class NetworkError extends Error {}
+
 async function tokenRequest(grant, body) {
   let res;
   try {
@@ -32,7 +36,7 @@ async function tokenRequest(grant, body) {
       body: JSON.stringify(body),
     });
   } catch {
-    throw new Error('Non riesco a collegarmi. Controlla la connessione e riprova.');
+    throw new NetworkError('Non riesco a collegarmi. Controlla la connessione e riprova.');
   }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -46,19 +50,67 @@ async function tokenRequest(grant, body) {
   return toSession(data);
 }
 
-/** Sessione valida (rinnovata se sta per scadere) oppure null. */
-export async function getSession() {
+let refreshing = null;   // un solo rinnovo alla volta, anche con più richieste in parallelo
+
+async function refreshSession(s) {
+  if (!refreshing) {
+    refreshing = tokenRequest('refresh_token', { refresh_token: s.refresh })
+      .then((fresh) => { writeSession(fresh); return fresh; })
+      .finally(() => { refreshing = null; });
+  }
+  return refreshing;
+}
+
+/**
+ * Sessione valida (rinnovata se sta per scadere) oppure null.
+ * Senza rete la sessione NON viene cancellata: si riprova al prossimo accesso.
+ */
+export async function getSession({ force = false } = {}) {
   const s = readSession();
   if (!s || !s.refresh || !isAllowed(s.email)) return null;
-  if (s.expiresAt - 60 > Date.now() / 1000) return s;
+  if (!force && s.expiresAt - 60 > Date.now() / 1000) return s;
   try {
-    const fresh = await tokenRequest('refresh_token', { refresh_token: s.refresh });
-    writeSession(fresh);
-    return fresh;
-  } catch {
+    return await refreshSession(s);
+  } catch (err) {
+    if (err instanceof NetworkError) return s;
     writeSession(null);
     return null;
   }
+}
+
+/** Token da usare nelle chiamate al database (rinnovato se serve). */
+export async function getAccessToken({ force = false } = {}) {
+  const s = await getSession({ force });
+  return s?.access || null;
+}
+
+/** Email dell'utente collegato. */
+export const currentEmail = () => readSession()?.email || '';
+
+/**
+ * Controlla con Supabase che il token sia autentico e appartenga a un utente
+ * abilitato. Una sessione inventata o revocata viene scartata.
+ */
+async function verifyWithServer(s) {
+  const check = (token) => fetch(`${base()}/user`, { headers: { apikey: AUTH.key, Authorization: `Bearer ${token}` } });
+  let res;
+  try { res = await check(s.access); } catch { return s; } // offline: si entra, i dati arriveranno quando torna la rete
+  if (res.status === 401 || res.status === 403) {
+    const fresh = await getSession({ force: true });
+    if (!fresh || fresh === s) return null;
+    try { res = await check(fresh.access); } catch { return fresh; }
+    if (!res.ok) return null;
+    s = fresh;
+  }
+  if (!res.ok) return s; // errore temporaneo del server: non blocchiamo l'accesso
+  const user = await res.json().catch(() => null);
+  return user && isAllowed(user.email) ? s : null;
+}
+
+/** Sessione scaduta mentre l'app è aperta: si torna al login. */
+export function sessionExpired() {
+  writeSession(null);
+  location.reload();
 }
 
 export async function signIn(email, password) {
@@ -83,8 +135,10 @@ export async function signOut() {
 export function requireLogin() {
   return new Promise(async (resolve) => {
     if (!authConfigured()) { showGate({ setup: true }); return; }
-    const s = await getSession();
+    let s = await getSession();
+    if (s) s = await verifyWithServer(s);
     if (s) { resolve(s); return; }
+    writeSession(null);
     showGate({ onDone: resolve });
   });
 }

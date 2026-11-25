@@ -153,3 +153,31 @@ Sidebar, rotte, titoli e dashboard si aggiornano senza altre modifiche.
 
 Ultime versioni di Chrome, Edge, Safari e Firefox (desktop e mobile).
 In navigazione privata alcuni browser limitano o cancellano IndexedDB alla chiusura.
+
+---
+
+## CRM su Supabase (Clienti, Richieste, Progetti, Attività, Promemoria)
+
+I dati del CRM sono salvati su **Supabase** (progetto `zefiro-gestionale`) e sono gli stessi su ogni dispositivo.
+Le altre parti (preventivi, note, timeline, impostazioni) restano per ora in IndexedDB.
+
+- Schema del database: `supabase/crm-schema.sql` (tabelle, collegamenti, indici, Row Level Security).
+- Collegamento: `js/config/auth.js` (Project URL + chiave **publishable**; mai la chiave secret/service_role).
+- Accesso ai dati: `js/core/api.js` (chiamate REST con il token dell'utente: la RLS decide cosa si può fare).
+- Viste: `js/views/clients.js`, `requests.js`, `projects.js`, `tasks.js`, `reminders.js`.
+- Valori ammessi (stati, priorità, provenienze): `js/config/crm.js` — se cambi uno stato nel database aggiornalo anche qui.
+
+---
+
+## Pubblicazione su Cloudflare Pages (origine separata)
+
+Il gestionale deve stare su un indirizzo **tutto suo**, non su `…github.io` insieme agli altri siti:
+browser storage e sessione sono condivisi tra le pagine con lo stesso indirizzo.
+
+1. Cloudflare → **Workers & Pages → Create → Pages → Connect to Git** → scegli il repository `zefiro-studio`.
+2. Impostazioni di build: **Framework preset: None**, **Build command: vuoto**, **Build output directory: `/`**.
+3. Nome del progetto (diventa l'indirizzo): es. `zefiro-gestionale` → `https://zefiro-gestionale.pages.dev`.
+4. **Save and Deploy**. Ogni push su `main` ripubblica in automatico.
+
+Il file `_headers` aggiunge le intestazioni di sicurezza (Content-Security-Policy, blocco iframe, niente indicizzazione).
+Se cambi progetto Supabase, aggiorna anche l'indirizzo in `connect-src` dentro `_headers`.

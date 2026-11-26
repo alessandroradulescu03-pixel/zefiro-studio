@@ -95,7 +95,7 @@ export function mountSidebar(el) {
     const dot = el.querySelector('[data-slot="db-dot"]');
     const label = el.querySelector('[data-slot="db-label"]');
     dot.className = `dot ${state.dbStatus === 'ready' ? 'dot--success' : state.dbStatus === 'error' ? 'dot--danger' : 'dot--warning'}`;
-    label.textContent = state.dbStatus === 'ready' ? 'Dati salvati in locale'
+    label.textContent = state.dbStatus === 'ready' ? 'Sincronizzato online'
       : state.dbStatus === 'error' ? 'Database non disponibile' : 'Connessione…';
   };
 

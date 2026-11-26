@@ -150,3 +150,16 @@ function clean(row) {
   });
   return out;
 }
+
+/**
+ * Riga personale unica (es. user_settings, chiave owner_id):
+ * la crea o aggiorna solo le colonne passate.
+ */
+export async function upsertMine(table, row) {
+  const { data } = await request('POST', table, {
+    query: { on_conflict: 'owner_id' },
+    body: row, // qui gli oggetti sono colonne jsonb: niente clean()
+    prefer: 'resolution=merge-duplicates,return=representation',
+  });
+  return Array.isArray(data) ? data[0] : data;
+}

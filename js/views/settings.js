@@ -428,7 +428,7 @@ function preferencesPanel({ preferences }) {
       <div class="card__head">
         <div>
           <h3 class="card__title">${icon('sliders')}Interfaccia</h3>
-          <p class="card__subtitle">Preferenze salvate solo su questo dispositivo.</p>
+          <p class="card__subtitle">Frase motivazionale e animazioni valgono su tutti i dispositivi; la barra ridotta solo su questo.</p>
         </div>
       </div>
       <div class="card__body" style="padding-top:var(--sp-2)">

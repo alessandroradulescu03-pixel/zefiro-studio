@@ -269,30 +269,30 @@
   opacity: 0.06;
   filter: saturate(1.2);
 }
-/* Frase nella topbar: centrata, gradiente del brand */
 .motto__text {
-  flex: 1 1 auto;
-  min-width: 0;
+  position: absolute;
+  right: clamp(24px, 4vw, 64px); bottom: clamp(20px, 5vh, 56px);
+  max-width: min(58vw, 820px);
   margin: 0;
-  text-align: center;
+  text-align: right;
   font-family: var(--font-display);
-  font-size: var(--fs-lg);
-  font-weight: var(--fw-semibold);
-  letter-spacing: -0.01em;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  background: linear-gradient(90deg, #39B8F4 0%, #7FA7FF 55%, #C9D8F2 100%);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  opacity: 0; transform: translateY(4px);
-  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+  font-size: clamp(30px, 4.6vw, 76px);
+  font-weight: var(--fw-bold);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: rgba(169, 186, 213, 0.11);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 900ms var(--ease), transform 900ms var(--ease);
 }
 .motto__text.is-in { opacity: 1; transform: none; }
-.motto__text[hidden] { display: none; }
+/* Riquadri leggermente trasparenti: la frase e il simbolo si intravedono sotto */
+.main {
+  --bg-surface: rgba(10, 28, 59, 0.62);
+  --bg-surface-2: rgba(13, 34, 71, 0.5);
+}
 @media (max-width: 760px) {
   .motto__mark { width: 120vw; right: -40vw; top: 30vh; }
-  /* Su telefono: riga a tutta larghezza sotto il titolo */
-  .topbar:has(.motto__text:not([hidden])) { flex-wrap: wrap; height: auto; min-height: var(--topbar-h); row-gap: 0; padding-top: 8px; padding-bottom: 8px; }
-  .topbar .motto__text { order: 3; flex: 1 0 100%; font-size: var(--fs-sm); text-align: left; padding-top: 2px; }
+  .motto__text { max-width: 86vw; font-size: clamp(26px, 9vw, 40px); bottom: 24px; }
 }
 @media print { .motto { display: none; } }
 

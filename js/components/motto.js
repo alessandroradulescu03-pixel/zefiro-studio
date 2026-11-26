@@ -36,18 +36,12 @@ export function mountMotto() {
   const el = document.createElement('div');
   el.className = 'motto';
   el.setAttribute('aria-hidden', 'true');
-  el.innerHTML = `<img class="motto__mark" src="${BRAND.symbolDark}" alt="" draggable="false">`;
+  el.innerHTML = `<img class="motto__mark" src="${BRAND.symbolDark}" alt="" draggable="false"><p class="motto__text"></p>`;
   document.body.prepend(el);
-
-  // La frase sta nella barra in alto: sempre leggibile, mai coperta dai contenuti.
-  const text = document.createElement('p');
-  text.className = 'motto__text';
-  const topbar = document.getElementById('topbar');
-  const actions = topbar?.querySelector('.topbar__actions');
-  if (actions) topbar.insertBefore(text, actions); else (topbar || el).append(text);
+  const text = el.querySelector('.motto__text');
 
   const update = (state, prev = {}) => {
-    el.hidden = text.hidden = state.preferences?.showMotto === false;
+    el.hidden = state.preferences?.showMotto === false;
     if (state.route?.id === prev.route?.id && text.textContent) return;
     const today = new Date().toISOString().slice(0, 10);
     const next = pick(`${today}|${state.route?.id || 'home'}`);
